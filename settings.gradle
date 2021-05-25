@@ -1,0 +1,6 @@
+rootProject.name = 'gradle-multi-project-build'
+
+include 'infrastructure',
+        'infrastructure:string-utils',
+        'random-text-generator'
+
