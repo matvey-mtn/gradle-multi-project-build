@@ -6,8 +6,13 @@ repositories {
 }
 
 allprojects {
+    group = 'org.example'
+    description = 'PoC for Using Libraries in Gradle Multi-Project Build'
+
+    /* plugins */
     apply plugin: 'java'
 
+    /* configuration */
     project.afterEvaluate {
         task beforeBuild {
             doLast {
