@@ -1,7 +1,3 @@
-plugins {
-    id 'java'
-}
-
 group 'org.example'
 version '1.0-SNAPSHOT'
 
@@ -9,11 +5,31 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+allprojects {
+    apply plugin: 'java'
+
+    project.afterEvaluate {
+        task beforeBuild {
+            doLast {
+                def now = getDate()
+                println 'Starting build for project "' + project.name + '" at ' + now
+            }
+        }
+
+        tasks.named('classes') {
+            it.dependsOn('beforeBuild')
+        }
+
+        project.tasks.named('jar') { archiveTask ->
+            archiveTask.doLast {
+                println 'Build SUCCESSFULL for module: ' + project.name + ' version: ' + version
+            }
+        }
+    }
 }
 
-test {
-    useJUnitPlatform()
+static def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd-HH:mm:ss')
+    return formattedDate
 }
