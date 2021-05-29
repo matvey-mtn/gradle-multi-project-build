@@ -1,6 +1,14 @@
 rootProject.name = 'gradle-multi-project-build'
 
-include 'infrastructure',
-        'infrastructure:string-utils',
-        'random-text-generator'
+include('random-text-generator')
 
+def jenkinsHome = System.getenv('JENKINS_HOME')
+
+if (jenkinsHome == null || jenkinsHome.empty) {
+    includeBuild('./infrastructure') {
+        dependencySubstitution {
+            // substitute dependency if not running on Jenkins
+            substitute module('org.example.infrastructure:string-utils') with project(':string-utils')
+        }
+    }
+}
